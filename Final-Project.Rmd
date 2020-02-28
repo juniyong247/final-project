@@ -1,0 +1,95 @@
+---
+title: "About Data"
+author: "Jun-Yong Kim"
+date: "2/27/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+library(dplyr)
+library(janitor)
+library(shiny)
+library(ggplot2)
+library(readr)
+
+```
+
+##About
+
+In this project, I will analyze soccer wages as well as transfer data over the past three years (from the 2017 Summer transfer window onwards) in Europe's top five leagues (English Premier Leaguee, French Ligue 1, Spanish Primera Division, Italian Serie A, and the German Bundesliga) to determine what factors affect the perceived valuation of an individual player. This timeline was chosen to start in 2017 mainly due to the landmark Neymar transfer of 2017 from FC Barcelona to Paris Saint Germain FC, the largest player purchase in history by a significant margin, which significantly inflated the market in terms of transfer fees as well as for wages. This transfer has since raised the bar for players across the board and has unleaeshed even greater levels of financial spending on the part of wealthier clubs. 
+
+I hope to identify correlations between players and personal characteristics with their wages and market values (to be determined by transfer fees). This will include their ages, nationality, and positions, as well as generally how highly rated they are in the footballing world (to be determined by their FIFA overall ratings, for the sake of standardization). 
+
+
+
+```{r readingData, include = FALSE}
+
+english_premier_league2017 <- read_csv("raw-data/data/2017/english_premier_league2017.csv")
+german_bundesliga_12017 <- read_csv("raw-data/data/2017/german_bundesliga_12017.csv")
+italian_serie_a2017 <- read_csv("raw-data/data/2017/italian_serie_a2017.csv")
+spanish_primera_division2017 <- read_csv("raw-data/data/2017/spanish_primera_division2017.csv")
+french_ligue_12017 <- read_csv("raw-data/data/2017/french_ligue_12017.csv")
+
+english_premier_league2018 <- read_csv("raw-data/data/2018/english_premier_league2018.csv")
+german_bundesliga_12018 <- read_csv("raw-data/data/2018/german_bundesliga_12018.csv")
+italian_serie_a2018 <- read_csv("raw-data/data/2018/italian_serie_a2018.csv")
+spanish_primera_division2018 <- read_csv("raw-data/data/2018/spanish_primera_division2018.csv")
+french_ligue_12018 <- read_csv("raw-data/data/2018/french_ligue_12018.csv")
+
+english_premier_league2019 <- read_csv("raw-data/data/2019/english_premier_league2019.csv")
+german_bundesliga_12019 <- read_csv("raw-data/data/2019/german_bundesliga_12019.csv")
+italian_serie_a2019 <- read_csv("raw-data/data/2019/italian_serie_a2019.csv")
+spanish_primera_division2019 <- read_csv("raw-data/data/2019/spanish_primera_division2019.csv")
+french_ligue_12019 <- read_csv("raw-data/data/2019/french_ligue_12019.csv")
+
+#the data in the 3 chunks above are using transfer records in each league of Europe 
+#this goes back until 1992 but we are only using the past three years 
+
+
+player_characteristics_17 <- read_csv("raw-data/fifa-20-complete-player-dataset/players_18.csv")
+player_characteristics_18 <- read_csv("raw-data/fifa-20-complete-player-dataset/players_19.csv")
+player_characteristics_19 <- read_csv("raw-data/fifa-20-complete-player-dataset/players_20.csv")
+
+
+#loading in with read_csv using readr package
+#loading in files that I moved into raw-data subdirectory on terminal
+#files found on github, cleaned and arranged
+#emailed both ppl who posted data for permission to use 
+#made sure that this was cleaned after checking imports
+#kept contents as strings not cleaned for readability visually
+
+#the fifa complete player dataset has player characteristics
+#this is what we will use to evaluate the transfer fees 
+
+```
+```{r combiningData, include = FALSE}
+
+transfers_2017 <- rbind(english_premier_league2017, german_bundesliga_12017, italian_serie_a2017, spanish_primera_division2017, french_ligue_12017)
+
+transfers_2018 <- rbind(english_premier_league2018, german_bundesliga_12018, italian_serie_a2018, spanish_primera_division2018, french_ligue_12018)
+
+transfers_2019 <- rbind(english_premier_league2019, german_bundesliga_12019, italian_serie_a2019, spanish_primera_division2019, french_ligue_12019)
+
+#the above three new variables store the transfer recs of top 5 leagues
+#rbind will use the data from 5 leagues and combine them into 1
+#stores as dataset, uses same columns with rows added in 
+
+transfers_with_characteristics2017 <- transfers_2017 %>% 
+  full_join(player_characteristics_17)
+
+transfers_with_characteristics2018 <- transfers_2018 %>% 
+  full_join(player_characteristics_18)
+
+transfers_with_characteristics2019 <- transfers_2019 %>% 
+  full_join(player_characteristics_19)
+
+#the transfers_with_characteristics variables use full_join 
+#this merges datasets for transfers with characteristics
+#these datasets are what we will use for evaluating the transfers off of traits
+#merging then tracking nationality, age, position, etc 
+
+```
+
