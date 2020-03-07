@@ -78,13 +78,13 @@ transfers_2019 <- rbind(english_premier_league2019, german_bundesliga_12019, ita
 #stores as dataset, uses same columns with rows added in 
 
 transfers_with_characteristics2017 <- transfers_2017 %>% 
-  full_join(player_characteristics_17)
+  full_join(player_characteristics_17, by = c("player_name" = "long_name"))
 
 transfers_with_characteristics2018 <- transfers_2018 %>% 
-  full_join(player_characteristics_18)
+  full_join(player_characteristics_18, by = c("player_name" = "long_name"))
 
 transfers_with_characteristics2019 <- transfers_2019 %>% 
-  full_join(player_characteristics_19)
+  full_join(player_characteristics_19, by = c("player_name" = "long_name"))
 
 #the transfers_with_characteristics variables use full_join 
 #this merges datasets for transfers with characteristics
@@ -92,4 +92,29 @@ transfers_with_characteristics2019 <- transfers_2019 %>%
 #merging then tracking nationality, age, position, etc 
 
 ```
+
+```{r manipulating, include = FALSE}
+
+selected_characteristics2017 <- transfers_with_characteristics2017 %>% 
+  filter(transfer_movement == "in") %>% 
+  select(club_name, player_name, age.x, position, club_involved_name, fee_cleaned, league_name, year, height_cm, weight_kg, nationality, overall, potential, wage_eur, player_positions, preferred_foot)
+
+selected_characteristics2018 <- transfers_with_characteristics2018 %>% 
+  filter(transfer_movement == "in") %>% 
+  select(club_name, player_name, age.x, position, club_involved_name, fee_cleaned, league_name, year, height_cm, weight_kg, nationality, overall, potential, wage_eur, player_positions, preferred_foot)
+
+selected_characteristics2019 <- transfers_with_characteristics2019 %>% 
+  filter(transfer_movement == "in") %>% 
+  select(club_name, player_name, age.x, position, club_involved_name, fee_cleaned, league_name, year, height_cm, weight_kg, nationality, overall, potential, wage_eur, player_positions, preferred_foot)
+
+#these three filter the dataset for what characteristics I will be evaluating by
+#trying to find a trend between factors like age, position, nationality, height/weight, etc and how they affect price
+#doing for all three datasets 
+
+#planning to see trends in what factors will affect the transfer price of a player
+#comparing the qualities of different players and seeing how they are valued on the market
+#also using overall data as a way to peg analysis to a relative standard
+#will be cleaning data to get all the values needed as soon as  I can figure it out
+```
+
 
